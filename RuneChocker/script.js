@@ -343,7 +343,7 @@ async function loadTopFlips() {
 
             const totalVolume = (vol.highPriceVolume || 0) + (vol.lowPriceVolume || 0);
 
-            if (totalVolume > 300 && prices.high && prices.low) {
+            if (totalVolume > 175 && prices.high && prices.low) {
                 const tax = Math.min(prices.high * 0.01, 5000000);
                 const profit = (prices.high - tax) - prices.low;
                 const roi = (profit / prices.low) * 100;
@@ -380,10 +380,14 @@ async function loadTopFlips() {
             const div = document.createElement('div');
             div.className = 'flip-item';
             div.innerHTML = `
-                <img src="https://www.osrsbox.com/osrsbox-db/items-icons/${flip.id}.png" alt="${flip.name}" onerror="this.style.display='none'">
-                <div class="flip-info">
-                    <span class="flip-name">${flip.name}</span>
-                    <span class="flip-profit positive-profit">${formatPrice(Math.floor(flip.profit))} profit</span>
+                <div class="flip-item-name">
+                    <img src="https://www.osrsbox.com/osrsbox-db/items-icons/${flip.id}.png" alt="${flip.name}" onerror="this.style.display='none'">
+                    ${flip.name}
+                </div>
+                <div>
+                    <span class="flip-item-profit">${formatPrice(Math.floor(flip.profit))}</span>
+                    <span class="flip-item-roi">${flip.roi.toFixed(2)}% ROI</span>
+                    <span class="flip-item-volume">Vol: ${flip.volume.toLocaleString()}</span>
                 </div>
             `;
             div.addEventListener('click', () => {

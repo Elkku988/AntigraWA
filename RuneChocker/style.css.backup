@@ -47,18 +47,6 @@ header {
     animation: fadeInDown 0.8s ease-out;
 }
 
-header h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 4px 20px var(--accent-glow);
-    margin-bottom: 0.5rem;
-    letter-spacing: -1px;
-}
-
 header p {
     color: var(--text-secondary);
     font-size: 1.1rem;
@@ -304,63 +292,6 @@ header p {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    border-bottom: 1px solid var(--card-border);
-    transition: background 0.2s;
-    cursor: pointer;
-}
-
-.flip-item:last-child {
-    border-bottom: none;
-}
-
-.flip-item:hover {
-    background: var(--glass-shine);
-    border-radius: 8px;
-}
-
-.flip-item-name {
-    font-weight: 600;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.flip-item-profit {
-    color: var(--success);
-    font-weight: 700;
-}
-
-.flip-item-roi {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-left: 10px;
-}
-
-.flip-item-volume {
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    margin-left: 10px;
-    opacity: 0.8;
-}
-
-/* Utilities */
-.hidden {
-    display: none !important;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--bg-dark);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--card-border);
-    border-radius: 5px;
     border: 2px solid var(--bg-dark);
 }
 
