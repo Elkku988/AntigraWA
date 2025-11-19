@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSRS Price Checker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>OSRS Price Checker</h1>
+            <p>Real-time prices from the Grand Exchange</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="item-search" placeholder="Search for an item (e.g., Abyssal whip)...">
+            <div id="search-results" class="search-results hidden"></div>
+        </div>
+
+        <div id="item-data" class="item-data hidden">
+            <div class="item-header">
+                <img id="item-icon" src="" alt="Item Icon" class="item-icon">
+                <h2 id="item-name">Item Name</h2>
+            </div>
+
+            <div class="price-grid">
+                <div class="price-card high">
+                    <h3>High Price</h3>
+                    <p id="high-price">0 gp</p>
+                    <span id="high-time" class="time">Just now</span>
+                </div>
+                <div class="price-card low">
+                    <h3>Low Price</h3>
+                    <p id="low-price">0 gp</p>
+                    <span id="low-time" class="time">Just now</span>
+                </div>
+                <div class="price-card profit">
+                    <h3>Approx. Profit</h3>
+                    <p id="profit">0 gp</p>
+                    <span class="time">After Tax</span>
+                </div>
+                <div class="price-card roi">
+                    <h3>ROI</h3>
+                    <p id="roi">0%</p>
+                    <span class="time">Return on Investment</span>
+                </div>
+            </div>
+
+            <div class="graph-container">
+                <div class="graph-controls">
+                    <button class="time-btn active" data-time="1h">1h</button>
+                    <button class="time-btn" data-time="24h">24h</button>
+                    <button class="time-btn" data-time="1w">1w</button>
+                    <button class="time-btn" data-time="1m">1m</button>
+                    <button class="time-btn" data-time="1y">1y</button>
+                </div>
+                <canvas id="price-chart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
