@@ -1,12 +1,17 @@
 :root {
-    --bg-color: #121212;
-    --card-bg: #1e1e1e;
+    --bg-color: #1e1e1e;
+    --card-bg: #2d2d2d;
     --text-color: #e0e0e0;
-    --accent-color: #d7a636;
-    --border-color: #333;
+    --accent-color: #dfae00;
+    /* OSRS Gold-ish */
+    --high-color: #4caf50;
+    --low-color: #f44336;
+    --border-color: #444;
 }
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -125,6 +130,20 @@ header h1 {
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
+}
+
+.time-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.time-btn.active {
+    background-color: var(--accent-color);
+    color: #000;
+    border-color: var(--accent-color);
+}
+
+.hidden {
+    display: none;
 }
 
 /* Scrollbar */

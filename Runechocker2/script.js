@@ -21,15 +21,8 @@ const timeButtons = document.querySelectorAll('.time-btn');
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOM Content Loaded. Initializing...');
-    try {
-        await fetchItemMapping();
-    } catch (e) {
-        console.error('Init error:', e);
-    }
+    await fetchItemMapping();
     setupEventListeners();
-    console.log('Calling loadTopFlips...');
-    loadTopFlips();
 });
 
 function setupEventListeners() {
@@ -58,17 +51,15 @@ function setupEventListeners() {
 }
 
 async function fetchItemMapping() {
-    console.log('Fetching item mapping...');
     try {
         const response = await fetch(`${API_BASE}/mapping`, {
             headers: { 'User-Agent': USER_AGENT }
         });
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         itemMapping = await response.json();
         console.log('Item mapping loaded:', itemMapping.length, 'items');
     } catch (error) {
         console.error('Error fetching item mapping:', error);
-        // Don't alert, just log. loadTopFlips will handle empty mapping.
+        alert('Failed to load item data. Please refresh.');
     }
 }
 
@@ -181,8 +172,6 @@ async function fetchLatestPrice(id) {
     }
 }
 
-
-
 async function fetchPriceHistory(id, timeRange) {
     let timestep;
     // Map range to timestep
@@ -293,124 +282,4 @@ function formatTime(timestamp) {
     if (diff < 60) return `${diff}s ago`;
     if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
     return date.toLocaleTimeString();
-}
-
-async function loadTopFlips() {
-    const list = document.getElementById('top-flips-list');
-
-    console.log('Starting loadTopFlips...');
-    list.innerHTML = '<p class="loading-text">Fetching market data...</p>';
-
-    try {
-        if (itemMapping.length === 0) {
-            console.log('Item mapping empty, waiting...');
-            list.innerHTML = '<p class="loading-text">Waiting for item mapping...</p>';
-            return;
-        }
-
-        // Create a map for faster item lookup
-        const itemMap = new Map(itemMapping.map(i => [i.id, i]));
-
-        // Fetch 24h volume data and Latest prices
-        console.log('Fetching 24h and latest...');
-        const [volumeRes, latestRes] = await Promise.all([
-            fetchWithTimeout(`${API_BASE}/24h`, { headers: { 'User-Agent': USER_AGENT } }),
-            fetchWithTimeout(`${API_BASE}/latest`, { headers: { 'User-Agent': USER_AGENT } })
-        ]);
-
-        if (!volumeRes.ok || !latestRes.ok) {
-            throw new Error('API request failed');
-        }
-
-        const volumeData = (await volumeRes.json()).data;
-        const latestData = (await latestRes.json()).data;
-
-        console.log('Data fetched. Processing...');
-        list.innerHTML = '<p class="loading-text">Processing data...</p>';
-
-        let flips = [];
-
-        // Process items
-        for (const id in volumeData) {
-            // Convert id to number for map lookup if needed, though keys are strings in JSON
-            const item = itemMap.get(parseInt(id));
-            const vol = volumeData[id];
-            const prices = latestData[id];
-
-            if (!prices) continue; // Need prices
-            // If item is missing (mapping failed), we skip or use ID
-            const name = item ? item.name : `Item ${id}`;
-
-            const totalVolume = (vol.highPriceVolume || 0) + (vol.lowPriceVolume || 0);
-
-            if (totalVolume > 300 && prices.high && prices.low) {
-                const tax = Math.min(prices.high * 0.01, 5000000);
-                const profit = (prices.high - tax) - prices.low;
-                const roi = (profit / prices.low) * 100;
-
-                if (profit > 0) {
-                    flips.push({
-                        id: id,
-                        name: name,
-                        profit: profit,
-                        roi: roi,
-                        volume: totalVolume
-                    });
-                }
-            }
-        }
-
-        console.log(`Found ${flips.length} potential flips.`);
-
-        // Sort by profit desc
-        flips.sort((a, b) => b.profit - a.profit);
-
-        // Take top 50
-        const topFlips = flips.slice(0, 50);
-
-        // Render
-        list.innerHTML = '';
-
-        if (topFlips.length === 0) {
-            list.innerHTML = '<p class="loading-text">No flips found matching criteria.</p>';
-            return;
-        }
-
-        topFlips.forEach(flip => {
-            const div = document.createElement('div');
-            div.className = 'flip-item';
-            div.innerHTML = `
-                <img src="https://www.osrsbox.com/osrsbox-db/items-icons/${flip.id}.png" alt="${flip.name}" onerror="this.style.display='none'">
-                <div class="flip-info">
-                    <span class="flip-name">${flip.name}</span>
-                    <span class="flip-profit positive-profit">${formatPrice(Math.floor(flip.profit))} profit</span>
-                </div>
-            `;
-            div.addEventListener('click', () => {
-                selectItem({ id: flip.id, name: flip.name });
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-            list.appendChild(div);
-        });
-
-        console.log('Top Flips rendered.');
-
-    } catch (error) {
-        console.error('Error loading top flips:', error);
-        list.innerHTML = `<p class="loading-text negative-profit">Error loading data: ${error.message}</p>`;
-    }
-}
-
-async function fetchWithTimeout(resource, options = {}) {
-    const { timeout = 8000 } = options;
-
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
-
-    const response = await fetch(resource, {
-        ...options,
-        signal: controller.signal
-    });
-    clearTimeout(id);
-    return response;
 }

@@ -21,7 +21,7 @@
 
         <div id="item-data" class="item-data hidden">
             <div class="item-header">
-                <img id="item-icon" src="" alt="Item Icon" class="item-icon" style="display: none;">
+                <img id="item-icon" src="" alt="Item Icon" class="item-icon">
                 <h2 id="item-name">Item Name</h2>
             </div>
 
@@ -37,31 +37,26 @@
                     <span id="low-time" class="time">Just now</span>
                 </div>
                 <div class="price-card profit">
-                    <h3>Approx. Profit (w/ Tax)</h3>
+                    <h3>Approx. Profit</h3>
                     <p id="profit">0 gp</p>
+                    <span class="time">After Tax</span>
                 </div>
                 <div class="price-card roi">
                     <h3>ROI</h3>
                     <p id="roi">0%</p>
+                    <span class="time">Return on Investment</span>
                 </div>
             </div>
 
             <div class="graph-container">
                 <div class="graph-controls">
-                    <button class="time-btn" data-time="1h">1h</button>
-                    <button class="time-btn active" data-time="24h">24h</button>
+                    <button class="time-btn active" data-time="1h">1h</button>
+                    <button class="time-btn" data-time="24h">24h</button>
                     <button class="time-btn" data-time="1w">1w</button>
                     <button class="time-btn" data-time="1m">1m</button>
                     <button class="time-btn" data-time="1y">1y</button>
                 </div>
                 <canvas id="price-chart"></canvas>
-            </div>
-        </div>
-
-        <div id="top-flips-container">
-            <h2>Top Profitable Flips (24h Volume > 300)</h2>
-            <div id="top-flips-list">
-                <p class="loading-text">Loading top flips data...</p>
             </div>
         </div>
     </div>
